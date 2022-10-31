@@ -19,19 +19,19 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "rest_framework.authtoken",
-    "rest_framework",
-    "django_filters",
-    "corsheaders",
-    "djoser",
-    "recipes",
-    "users",
+    'api',
+    'users',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    'corsheaders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -107,7 +107,7 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 6,
 }
 
-AUTH_USER_MODEL = "users.User"
+# AUTH_USER_MODEL = "users.User"
 
 DJOSER = {
     "LOGIN_FIELD": "email",
