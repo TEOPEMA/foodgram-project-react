@@ -116,10 +116,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 )
             )
         else:
-            return queryset.annotate(
+            queryset = queryset.annotate(
                 is_favorited=Value(False, output_field=BooleanField()),
                 is_in_shopping_cart=Value(False, output_field=BooleanField())
             )
+        return queryset
 
     @action(detail=True, methods=['post'],
             permission_classes=[IsAuthenticated])
