@@ -1,3 +1,4 @@
+from colorfield.fields import ColorField
 from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
@@ -7,11 +8,20 @@ User = get_user_model()
 
 class Tag(models.Model):
     name = models.CharField(
-        verbose_name='Название', max_length=200, unique=True)
-    color = models.CharField(
-        verbose_name='Цвет в HEX', max_length=7, unique=True)
+        verbose_name='Название',
+        max_length=200,
+        unique=True
+    )
+    color = ColorField(
+        default='#FF0000',
+        format='hex',
+        verbose_name='Цвет в HEX'
+    )
     slug = models.SlugField(
-        verbose_name='Уникальный слаг', max_length=200, unique=True)
+        verbose_name='Уникальный слаг',
+        max_length=200,
+        unique=True
+    )
 
     class Meta:
         verbose_name = 'Тэг'
@@ -19,14 +29,18 @@ class Tag(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return f'{self.name}'
+        return str(self.name)
 
 
 class Ingredient(models.Model):
     name = models.CharField(
-        verbose_name='Название', max_length=200)
+        verbose_name='Название',
+        max_length=200
+    )
     measurement_unit = models.CharField(
-        verbose_name='Единицы измерения', max_length=20)
+        verbose_name='Единицы измерения',
+        max_length=20
+    )
 
     class Meta:
         verbose_name = 'Ингридиент'

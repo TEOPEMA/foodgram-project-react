@@ -1,14 +1,20 @@
 import os
 from pathlib import Path
+from distutils.util import strtobool
+from dotenv import load_dotenv
+
+project_folder = os.path.expanduser('~/foodgram-project-react/')
+
+load_dotenv(os.path.join(project_folder, '.env'))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.getenv('DJANGO_SECRET', default='p&l%385148kslhtyn^##a1)ilz@4zqj=rq&agdol^##zgl9(vs')
+SECRET_KEY = os.getenv('SECRET_KEY', default='p&l%385148kslhtyn^##a1)ilz@4zqj=rq&agdol^##zgl9(vs')
 
-DEBUG = False
+DEBUG = strtobool(os.getenv('DEBUG_STATUS', default='False'))
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='130.193.54.87, backend').split(', ')
 
 INSTALLED_APPS = [
     'api',
@@ -24,6 +30,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'corsheaders',
+    'colorfield',
     'django_filters',
 ]
 

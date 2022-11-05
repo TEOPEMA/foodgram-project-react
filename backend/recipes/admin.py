@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.contrib.admin import ModelAdmin, register
 
 from .models import Cart, Favorite, Ingredient, IngredientAmount, Recipe, Tag
@@ -6,6 +7,9 @@ from .models import Cart, Favorite, Ingredient, IngredientAmount, Recipe, Tag
 @register(Tag)
 class TagAdmin(ModelAdmin):
     list_display = ('name', 'slug', 'color')
+    prepopulated_fields = {
+        'slug': ('name',),
+    }
 
 
 @register(Ingredient)
@@ -20,10 +24,11 @@ class RecipeAdmin(ModelAdmin):
     list_filter = ('author', 'name', 'tags')
     readonly_fields = ('count_favorites',)
 
+    @admin.display(
+        description='Число добавлений в избранное'
+    )
     def count_favorites(self, obj):
         return obj.favorites.count()
-
-    count_favorites.short_description = 'Число добавлений в избранное'
 
 
 @register(IngredientAmount)

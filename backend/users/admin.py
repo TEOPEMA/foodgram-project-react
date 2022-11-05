@@ -7,8 +7,8 @@ from .models import Follow
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ['email', 'username', ]
-    list_filter = ['email', 'username', ]
+    list_display = ['email', 'username']
+    list_filter = ['email', 'username']
 
 
 @register(Follow)

@@ -5,12 +5,14 @@ from django.db.models import BooleanField, Exists, OuterRef, Sum, Value
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
-from recipes.models import (Cart, Favorite, Ingredient, IngredientAmount,
-                            Recipe, Tag)
+
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
+
+from recipes.models import (Cart, Favorite, Ingredient, IngredientAmount,
+                            Recipe, Tag)
 from users.models import Follow
 
 from .filters import IngredientSearchFilter, RecipeFilter
@@ -18,7 +20,8 @@ from .pagination import LimitPageNumberPagination
 from .permissions import AdminOrReadOnly, AdminUserOrReadOnly
 from .serializers import (FollowSerializer, IngredientSerializer,
                           RecipeReadSerializer, RecipeWriteSerializer,
-                          ShortRecipeSerializer, TagSerializer)
+                          ShortRecipeSerializer, TagSerializer,
+                          CustomUserSerializer)
 
 User = get_user_model()
 
@@ -38,10 +41,15 @@ class IngredientsViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class FollowViewSet(UserViewSet):
+    serializer_class = CustomUserSerializer
+    permission_classes = (AdminUserOrReadOnly,)
     pagination_class = LimitPageNumberPagination
 
     @action(
-        methods=['post'], detail=True, permission_classes=[IsAuthenticated])
+        methods=['post'],
+        detail=True,
+        permission_classes=[IsAuthenticated]
+    )
     def subscribe(self, request, id=None):
         user = request.user
         author = get_object_or_404(User, id=id)
@@ -144,7 +152,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if model.objects.filter(user=user, recipe__id=pk).exists():
             return Response({
                 'errors': 'Ошибка добавления рецепта в список'
-            }, status=HTTPStatus.BAD_REQUEST)
+            }, status=HTTPStatus.BAD_REQUEST
+            )
         recipe = get_object_or_404(Recipe, id=pk)
         model.objects.create(user=user, recipe=recipe)
         serializer = ShortRecipeSerializer(recipe)
@@ -157,10 +166,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response(status=HTTPStatus.NO_CONTENT)
         return Response({
             'errors': 'Ошибка удаления рецепта из списка'
-        }, status=HTTPStatus.BAD_REQUEST)
+        }, status=HTTPStatus.BAD_REQUEST
+        )
 
     @action(
-        detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+        detail=False,
+        methods=['get'],
+        permission_classes=[IsAuthenticated]
+    )
     def download_shopping_cart(self, request):
         ingredients = IngredientAmount.objects.filter(
             recipe__cart__user=request.user).values(

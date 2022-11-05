@@ -82,6 +82,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
 
 class RecipeWriteSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
+    author = CustomUserSerializer(read_only=True)
     ingredients = AddIngredientToRecipeSerializer(many=True)
     image = Base64ImageField()
 
@@ -167,7 +168,6 @@ class ShortRecipeSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField(source='author.id')
     email = serializers.ReadOnlyField(source='author.email')
     username = serializers.ReadOnlyField(source='author.username')
     first_name = serializers.ReadOnlyField(source='author.first_name')
@@ -180,6 +180,10 @@ class FollowSerializer(serializers.ModelSerializer):
         model = Follow
         fields = ('id', 'email', 'username', 'first_name', 'last_name',
                   'is_subscribed', 'recipes', 'recipes_count')
+        read_only_fields = (
+            'id', 'email', 'username',
+            'first_name', 'last_name'
+        )
 
     def get_is_subscribed(self, obj):
         return Follow.objects.filter(
@@ -190,7 +194,7 @@ class FollowSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         limit = request.GET.get('recipes_limit')
         queryset = Recipe.objects.filter(author=obj.author)
-        if limit:
+        if limit is not None and int(limit) > 0:
             queryset = queryset[:int(limit)]
         return ShortRecipeSerializer(queryset, many=True).data
 

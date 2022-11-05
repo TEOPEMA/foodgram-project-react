@@ -26,5 +26,9 @@ class Follow(models.Model):
             models.UniqueConstraint(
                 fields=['user', 'author'],
                 name='unique_follow',
+            ),
+            models.CheckConstraint(
+                check=~models.Q(user=models.F('author')),
+                name='author_cannot_subscribe_to_himself.',
             )
         ]
