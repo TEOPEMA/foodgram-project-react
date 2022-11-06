@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
+from rest_framework.decorators import api_view
 from django.db.models import BooleanField, Exists, OuterRef, Sum, Value
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -45,6 +46,7 @@ class FollowViewSet(UserViewSet):
     permission_classes = (AdminUserOrReadOnly,)
     pagination_class = LimitPageNumberPagination
 
+    @api_view(['GET'])
     @action(['get', ], detail=False)
     def me(self, request, *args, **kwargs):
         serializer = CustomUserSerializer(
