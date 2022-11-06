@@ -45,6 +45,14 @@ class FollowViewSet(UserViewSet):
     permission_classes = (AdminUserOrReadOnly,)
     pagination_class = LimitPageNumberPagination
 
+    @action(['get', ], detail=False)
+    def me(self, request, *args, **kwargs):
+        serializer = CustomUserSerializer(
+            self.request.user,
+            context={'request': request}
+        )
+        return Response(serializer.data)
+
     @action(
         methods=['post'],
         detail=True,
