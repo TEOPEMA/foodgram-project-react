@@ -1,3 +1,6 @@
+pillow==9.1.1
+drf-extra-fields==3.4.0
+django-colorfield==0.7.1
 asgiref==3.5.0
 atomicwrites==1.4.0
 attrs==21.4.0
@@ -16,7 +19,6 @@ django-templated-mail==1.1.1
 djangorestframework==3.13.1
 djangorestframework-simplejwt==4.8.0
 djoser==2.1.0
-drf-extra-fields==3.2.1
 environs==9.5.0
 factory-boy==3.2.1
 Faker==11.3.0
@@ -35,7 +37,6 @@ mccabe==0.6.1
 model-bakery==1.4.0
 oauthlib==3.1.1
 packaging==21.3
-Pillow==9.0.0
 pluggy==1.0.0
 psycopg2-binary==2.9.3
 py==1.11.0

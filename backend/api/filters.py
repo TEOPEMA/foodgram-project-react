@@ -1,19 +1,50 @@
-from django_filters import AllValuesMultipleFilter, rest_framework
-from django_filters.widgets import BooleanWidget
-from recipes.models import Recipe
-from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import (AllValuesMultipleFilter,
+                                           BooleanFilter, CharFilter,
+                                           FilterSet, NumberFilter)
+
+from recipe.models import Ingredient, Recipe
 
 
-class IngredientSearchFilter(SearchFilter):
-    search_param = 'name'
+class IngredientFilter(FilterSet):
+    name = CharFilter(label='name', field_name='name', lookup_expr='icontains')
+
+    class Meta:
+        model = Ingredient
+        fields = ('name', )
 
 
-class RecipeFilter(rest_framework.FilterSet):
-    is_in_shopping_cart = rest_framework.BooleanFilter(widget=BooleanWidget())
-    is_favorited = rest_framework.BooleanFilter(widget=BooleanWidget())
-    tags = AllValuesMultipleFilter(field_name='tags__slug')
-    author = AllValuesMultipleFilter(field_name='author__id')
+class RecipeFilter(FilterSet):
+    is_favorited = BooleanFilter(
+        method='get_is_favorited',
+    )
+    is_in_shopping_cart = BooleanFilter(
+        method='get_is_in_shopping_cart',
+    )
+    author = NumberFilter(
+        field_name='author__id',
+        lookup_expr='exact'
+    )
+    tags = AllValuesMultipleFilter(
+        field_name='tags__slug',
+    )
 
     class Meta:
         model = Recipe
-        fields = ['author__id', 'tags__slug']
+        fields = (
+            'is_favorited',
+            'is_in_shopping_cart',
+            'author',
+            'tags'
+        )
+
+    def get_is_favorited(self, queryset, name, value):
+        user = self.request.user
+        if value:
+            return Recipe.objects.filter(favorite=user)
+        return Recipe.objects.all()
+
+    def get_is_in_shopping_cart(self, queryset, name, value):
+        user = self.request.user
+        if value:
+            return Recipe.objects.filter(shopping_cart=user)
+        return Recipe.objects.all()

@@ -1,20 +1,46 @@
-from django.contrib import admin
 from django.contrib.admin import register
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
 
-from .models import Follow
-
-
-class CustomUserAdmin(UserAdmin):
-    list_display = ['email', 'username']
-    list_filter = ['email', 'username']
+from .models import FoodgramUser
 
 
-@register(Follow)
-class FollowAdmin(admin.ModelAdmin):
-    autocomplete_fields = ('author', 'user')
-
-
-admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
+@register(FoodgramUser)
+class FoodgramUserAdmin(UserAdmin):
+    list_display = (
+        'username',
+        'email',
+        'first_name',
+        'last_name'
+    )
+    fieldsets = (
+        (
+            None, {
+                'fields': (
+                    ('username', 'email'),
+                    ('first_name', 'last_name'),
+                    ('date_joined', ),
+                    ('password', )
+                ),
+            }
+        ),
+        (
+            'Права доступа', {
+                'classes': ('collapse', ),
+                'fields': (
+                    'is_active',
+                    'is_superuser',
+                    'is_staff'
+                ),
+            }
+        )
+    )
+    search_fields = (
+        'username',
+        'email'
+    )
+    list_filter = (
+        'username',
+        'first_name',
+        'email'
+    )
+    save_on_top = True
