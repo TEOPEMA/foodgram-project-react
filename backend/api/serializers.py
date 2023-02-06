@@ -166,13 +166,12 @@ class RecipeSerializer(ModelSerializer):
         )
 
     def get_ingredients(self, obj: object) -> Any:
-        ingredients = obj.ingredients.values(
+        return obj.ingredients.values(
             'id',
             'name',
             'measurement_unit',
             amount=F('recipe__amount')
         )
-        return ingredients
 
     def get_is_favorited(self, obj: object) -> bool:
         user = self.context.get('request').user
