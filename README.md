@@ -57,7 +57,7 @@ sudo docker-compose exec backend python manage.py createsuperuser
 ```
 * Загрузить данные ингредиентов и теги
 ```
-sudo docker-compose exec backend python manage.py loaddata --exclude auth.permission --exclude contenttypes ./data/db.json
+sudo docker-compose exec backend python manage.py loaddata --exclude auth.permission --exclude contenttypes ./data/ingredients.json
 ```
 
 
