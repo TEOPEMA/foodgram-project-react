@@ -1,6 +1,6 @@
 pillow==9.1.1
 drf-extra-fields==3.4.0
-django-colorfield==0.7.1
+django-colorfield==0.7.2
 asgiref==3.5.0
 atomicwrites==1.4.0
 attrs==21.4.0
@@ -65,4 +65,3 @@ typing_extensions==4.0.1
 uritemplate==4.1.1
 urllib3==1.26.8
 zipp==3.7.0
-django_colorfield==0.7.2
