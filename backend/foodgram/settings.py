@@ -2,11 +2,6 @@ import os
 from distutils.util import strtobool
 from pathlib import Path
 
-from dotenv import load_dotenv
-
-project_folder = os.path.expanduser('~/foodgram-project-react/')
-
-load_dotenv(os.path.join(project_folder, '.env'))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
