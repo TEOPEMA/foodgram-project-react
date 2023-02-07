@@ -62,8 +62,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }} # Если ваш ssh-ключ защищён фразой-паролем
           script: |
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-project:v1
             sudo docker-compose stop
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
