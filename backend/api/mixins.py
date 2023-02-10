@@ -27,11 +27,11 @@ class AddDelViewMixin:
         )
         exists = manager.filter(id=obj_id).exists()
 
-        if not exists and self.request.method == ('GET', 'POST'):
+        if not exists and self.request.method in ('GET', 'POST'):
             manager.add(obj)
             return Response(serializer.data, status=HTTP_201_CREATED)
 
-        if exists and self.request.method == ('DELETE', ):
+        if exists and self.request.method == 'DELETE':
             manager.remove(obj)
             return Response(status=HTTP_204_NO_CONTENT)
 
