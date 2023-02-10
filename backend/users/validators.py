@@ -5,35 +5,14 @@ from django.utils.deconstruct import deconstructible
 
 
 @deconstructible
-class MinLengthValidator:
-    min_length = 0
-    message = 'Значение слишком короткое.'
-
-    def __init__(self, min_length: int = None, message: str = None) -> None:
-        if min_length:
-            self.min_length = min_length
-        if message:
-            self.message = message
-
-    def __call__(self, value: str) -> None:
-        if len(value) < self.min_length:
-            raise ValidationError(self.message)
-
-
-@deconstructible
-class RegexValidator:
-    regex = r'^[\w.@+-]+\Z'
-    message = 'Значение поля содержит недопустимые символы.'
-
-    def __init__(self, regex: str = None, message: str = None) -> None:
-        if regex:
-            self.regex = regex
-        if message:
-            self.message = message
-
-    def __call__(self, value: str) -> None:
-        if not match(
-            pattern=self.regex,
-            string=value
-        ):
-            raise ValidationError(self.message)
+class MinLengthRegValidator:
+    def validate_username(self, username: str):
+        if len(username) < 3:
+            raise ValidationError(
+                'Длина username допустима от 3 до 150'
+            )
+        if not match(pattern=r'^[\w.@+-]+$', string=username):
+            raise ValidationError(
+                'В username допустимы только буквенные символы.'
+            )
+        return username.lower()

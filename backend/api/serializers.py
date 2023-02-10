@@ -6,13 +6,14 @@ from django.core.paginator import Paginator
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
-from rest_framework.serializers import (ModelSerializer, SerializerMethodField,
+from rest_framework.serializers import (ModelSerializer, RegexField,
+                                        SerializerMethodField,
                                         ValidationError)
 
 from recipe.models import Ingredient, Recipe, Tag
 
 from .utils import recipe_amount_ingredients_set
-from .validators import class_obj_validate, hex_color_validate
+from .validators import class_obj_validate
 
 User = get_user_model()
 
@@ -33,7 +34,7 @@ class UserSerializer(ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
         read_only_fields = ('is_subscribed', )
 
-    def get_is_subscribed(self, obj: object) -> bool:
+    def get_is_subscribed(self, obj: str) -> bool:
         user = self.context.get('request').user
         if user.is_anonymous or (user == obj):
             return False
@@ -44,7 +45,7 @@ class RecipeSmallSerializer(ModelSerializer):
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time')
-        read_only_fields = ('__all__', )
+        read_only_fields = ['__all__']
 
 
 class UserFollowsSerializer(UserSerializer):
@@ -63,9 +64,9 @@ class UserFollowsSerializer(UserSerializer):
             'recipes_count',
             'is_subscribed'
         )
-        read_only_fields = ('__all__', )
+        read_only_fields = ['__all__']
 
-    def get_recipes_count(self, obj: object) -> int:
+    def get_recipes_count(self, obj: int) -> int:
         return obj.recipes.count()
 
     def get_is_subscribed(*args) -> bool:
@@ -121,19 +122,15 @@ class IngredientSerializer(ModelSerializer):
     class Meta:
         model = Ingredient
         fields = '__all__'
-        read_only_fields = ('__all__', )
+        read_only_fields = ['__all__']
 
 
 class TagSerializer(ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
-        read_only_fields = ('__all__', )
-
-    def validate_color(self, color: str) -> str:
-        color = str(color).strip(' #')
-        hex_color_validate(color)
-        return f'#{color}'
+        read_only_fields = ['__all__']
+        color = RegexField(r'^#(?:[0-9a-fA-F]{1,2}){3}$')
 
 
 class RecipeSerializer(ModelSerializer):
@@ -192,8 +189,8 @@ class RecipeSerializer(ModelSerializer):
         for key, value in values_as_list.items():
             if not isinstance(value, list):
                 raise ValidationError(
-                    f'Содержимое "{key}" должно быть списком./n'
-                    f'{key}: {value}/n'
+                    f'Содержимое "{key}" должно быть списком.\n'
+                    f'{key}: {value}\n'
                     f'data: {data}'
                 )
 

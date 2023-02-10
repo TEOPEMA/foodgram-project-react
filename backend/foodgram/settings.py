@@ -7,9 +7,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', default='p&l%385148kslhtyn^##a1)ilz@4zqj=rq&agdol^##zgl9(vs')
 
-DEBUG = strtobool(os.getenv('DEBUG_STATUS', default='True'))
+DEBUG = strtobool(os.getenv('DEBUG_STATUS', default='False'))
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='158.160.15.44').split(', ')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost').split(',')
 
 
 INSTALLED_APPS = [
@@ -72,6 +72,13 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': ('django.contrib.auth.password_validation.'
@@ -111,7 +118,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.FoodgramUser'
+AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

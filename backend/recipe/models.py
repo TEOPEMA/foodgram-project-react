@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db.models import (CASCADE, CharField, DateTimeField, ForeignKey,
                               ImageField, ManyToManyField, Model,
                               PositiveIntegerField, SlugField, TextField,
@@ -73,7 +73,13 @@ class Tag(Model):
         verbose_name='Код цвета',
         max_length=7,
         default='#ffffff',
+        validators=[
+            RegexValidator(
+                regex=r"^#(?:[0-9a-fA-F]{3}){1,2}$",
+            )
+        ]
     )
+
     name = CharField(
         verbose_name='Тег',
         max_length=200,

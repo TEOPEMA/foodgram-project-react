@@ -10,8 +10,8 @@ EMPTY_VAL_PLACEHOLDER = 'Не указано'
 @register(Ingredient)
 class IngredientAdmin(ModelAdmin):
     list_display = ('name', 'measurement_unit')
-    search_fields = ('name', )
-    list_filter = ('name', )
+    search_fields = ('name',)
+    list_filter = ('name',)
     empty_value_display = EMPTY_VAL_PLACEHOLDER
     save_on_top = True
 
@@ -35,10 +35,10 @@ class RecipeAdmin(ModelAdmin):
         '_get_count_added_to_favorite'
     )
     fields = (
-        ('image', ),
+        ('image',),
         ('name', 'author'),
         ('tags', 'cooking_time'),
-        ('text', )
+        ('text',)
     )
     raw_id_fields = ('author', )
     list_filter = (
@@ -49,7 +49,7 @@ class RecipeAdmin(ModelAdmin):
     search_fields = ('name', 'author')
     save_on_top = True
     empty_value_display = EMPTY_VAL_PLACEHOLDER
-    inlines = (IngredientInline, )
+    inlines = (IngredientInline,)
 
     def getimage(self, obj):
         return mark_safe(f'<img src={obj.image.url} width="80" height="35"')
@@ -72,6 +72,6 @@ class TagAdmin(ModelAdmin):
             }
         ),
     )
-    search_fields = ('name', )
+    search_fields = ('name',)
     save_on_top = True
     empty_value_display = EMPTY_VAL_PLACEHOLDER

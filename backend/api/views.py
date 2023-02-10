@@ -7,7 +7,6 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from recipe.models import Ingredient, IngredientAmount, Recipe, Tag
-
 from .filters import IngredientFilter, RecipeFilter
 from .mixins import AddDelViewMixin
 from .paginators import PageLimitPagination

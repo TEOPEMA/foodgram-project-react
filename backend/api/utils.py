@@ -17,7 +17,6 @@ def recipe_amount_ingredients_set(recipe, ingredients):
 
 
 def prepare_file(user, ingredients, filename='shopping_list.csv'):
-    filename = 'shopping_list.csv'
     create_time = dt.now().strftime('%d.%m.%Y %H:%M')
 
     response = HttpResponse(content_type='text/csv; charset=utf-8')

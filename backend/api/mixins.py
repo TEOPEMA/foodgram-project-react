@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.status import (HTTP_201_CREATED, HTTP_204_NO_CONTENT,
                                    HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED)
@@ -27,11 +27,11 @@ class AddDelViewMixin:
         )
         exists = manager.filter(id=obj_id).exists()
 
-        if not exists and self.request.method in ('GET', 'POST'):
+        if not exists and self.request.method == ('GET', 'POST'):
             manager.add(obj)
             return Response(serializer.data, status=HTTP_201_CREATED)
 
-        if exists and self.request.method in ('DELETE', ):
+        if exists and self.request.method == ('DELETE', ):
             manager.remove(obj)
             return Response(status=HTTP_204_NO_CONTENT)
 
