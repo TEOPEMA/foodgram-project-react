@@ -1,76 +1,46 @@
-from re import match
-
 from django.contrib.auth.models import AbstractUser
 from django.db.models import (CharField, EmailField,
                               ManyToManyField)
 from django.db.models.functions import Length
-from django.utils.translation import gettext_lazy
 
-from django.core.exceptions import ValidationError
 
 CharField.register_lookup(Length)
 
 
 class User(AbstractUser):
     email = EmailField(
-        verbose_name='Адрес электронной почты',
-        help_text='Обязательное поле',
-        unique=True,
-        max_length=254
-    )
-    username = CharField(
-        verbose_name='Логин',
-        help_text='Обязательное поле',
-        unique=True,
-        max_length=150,
+        'Электронная почта',
+        max_length=254,
+        unique=True
     )
     first_name = CharField(
-        verbose_name='Имя',
-        help_text='Обязательное поле',
-        max_length=150
+        'Имя',
+        max_length=150,
+        blank=False
     )
     last_name = CharField(
-        verbose_name='Фамилия',
-        help_text='Обязательное поле',
-        max_length=150
-    )
-    password = CharField(
-        verbose_name=gettext_lazy('Пароль'),
-        help_text='Обязательное поле',
+        'Фамилия',
         max_length=150,
-        validators=(
-        )
+        blank=False
     )
+    username = CharField(
+        'Уникальное имя',
+        max_length=150,
+    )
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+
     subscription = ManyToManyField(
         verbose_name='Подписка',
-        related_name='Подписчики',
+        related_name='followers',
         to='self',
         symmetrical=False
     )
 
-    def validate_username(self, username: str):
-        if len(username) < 3:
-            raise ValidationError(
-                'Длина username допустима от 3 до 150'
-            )
-        if not match(pattern=r'^[\w.@+-]+$', string=username):
-            raise ValidationError(
-                'В username допустимы только буквенные символы.'
-            )
-        return username.lower()
-
-    def validate_password(self, attr):
-        super().validate(attr)
-        if len(attr.get('password')) >= 150:
-            raise ValidationError({
-                'password': ('Пароль не может содержать более 150 символов.')
-            })
-        return attr
-
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-        ordering = ('username', 'email')
+        ordering = ('-pk', )
 
     def __str__(self) -> str:
         return self.username
