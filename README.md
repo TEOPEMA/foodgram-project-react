@@ -110,5 +110,6 @@ sudo docker-compose exec backend python manage.py loaddata --exclude auth.permis
  [http://158.160.15.44/admin](http://158.160.15.44/admin)
 ```
 teo (Логин)
+vas@mal.ru (почта)
 2580 (Пароль)
 ```
