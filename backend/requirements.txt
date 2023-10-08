@@ -1,4 +1,4 @@
-# pillow==9.1.1
+# pillow==10.0.1
 # drf-extra-fields==3.4.0
 # django-colorfield==0.7.2
 # asgiref==3.5.0
@@ -69,7 +69,7 @@ requests==2.27.1
 django==3.2.13
 djangorestframework==3.13.1
 django-filter==21.1
-pillow==9.1.1
+pillow==10.0.1
 drf-extra-fields==3.4.0
 djoser==2.1.0
 gunicorn==20.1.0
